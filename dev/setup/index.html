@@ -59,6 +59,7 @@
 <li class="toctree-l3"><a class="reference internal" href="programming-exercises/#caching-example-for-maven">Caching example for Maven</a></li>
 <li class="toctree-l3"><a class="reference internal" href="kubernetes/">Kubernetes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#run-the-server-via-a-service-configuration">Run the server via a service configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-the-server-via-docker">Run the server via Docker</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#run-the-server-via-a-run-configuration-in-intellij">Run the server via a run configuration in IntelliJ</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#other-run-debug-configurations">Other run / debug configurations</a></li>
 </ul>
@@ -332,6 +333,7 @@ configuration if you need additional customizations.</p>
 <div class="section" id="run-the-server-via-a-service-configuration">
 <h3>Run the server via a service configuration<a class="headerlink" href="#run-the-server-via-a-service-configuration" title="Permalink to this headline"></a></h3>
 <p>This setup is recommended for production instances as it registers Artemis as a service and e.g. enables auto-restarting of Artemis after the VM running Artemis has been restarted.
+As alternative you could take a look at the section below about <a class="reference external" href="#run-the-server-via-docker">deploying artemis as docker container</a>.
 For development setups, see the other guides below.</p>
 <p>This is a service file that works on Debian/Ubuntu (using systemd):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
@@ -375,6 +377,126 @@ For development setups, see the other guides below.</p>
 <p>The file should be placed at <code class="docutils literal notranslate"><span class="pre">/etc/systemd/system/artemis.service</span></code> and after running <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">daemon-reload</span></code>, you can start the service using <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">artemis</span> <span class="pre">start</span></code>.</p>
 <p>You can stop the service using <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">artemis</span> <span class="pre">stop</span></code> and restart it using <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">artemis</span> <span class="pre">restart</span></code>.</p>
 <p>Logs can be fetched using <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">journalctl</span> <span class="pre">-u</span> <span class="pre">artemis</span> <span class="pre">-f</span> <span class="pre">-n</span> <span class="pre">200</span></code>.</p>
+</div>
+<div class="section" id="run-the-server-via-docker">
+<h3>Run the server via Docker<a class="headerlink" href="#run-the-server-via-docker" title="Permalink to this headline"></a></h3>
+<p>Artemis provides a Docker image named <code class="docutils literal notranslate"><span class="pre">ghcr.io/ls1intum/artemis:&lt;VERSION&gt;</span></code>.
+The current develop branch will be deployed as <code class="docutils literal notranslate"><span class="pre">latest</span></code> version.
+Releases like <code class="docutils literal notranslate"><span class="pre">5.7.1</span></code> are deployed as <code class="docutils literal notranslate"><span class="pre">ghcr.io/ls1intum/artemis:5.7.1</span></code>.
+The easiest way to configure a local deployment via Docker is a deployment with a docker-compose file.
+You could use a compose file similar to this (as an example this deployment uses the Gitlab+Jenkins configuration of Artemis:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span> <span class="s">&#39;3&#39;</span>
+
+<span class="nt">services</span><span class="p">:</span>
+  <span class="nt">gitlab</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gitlab/gitlab-ce</span>
+    <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+    <span class="nt">volumes</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./data/gitlab/config:/etc/gitlab</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./data/gitlab/logs:/var/log/gitlab</span>
+      <span class="c1"># - $BACKUP_DIR/gitlab:/var/opt/gitlab/backups # Optional but useful</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./data/gitlab/data:/var/opt/gitlab</span>
+    <span class="nt">environment</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">GITLAB_OMNIBUS_CONFIG</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+          <span class="no">external_url &quot;https://${GIT_SERVER_NAME}&quot;</span>
+          <span class="no">nginx[&#39;listen_port&#39;] = 80</span>
+          <span class="no">nginx[&#39;listen_https&#39;] = false</span>
+          <span class="no">nginx[&#39;hsts_max_age&#39;] = 0</span>
+          <span class="no">prometheus_monitoring[&#39;enable&#39;] = false</span>
+          <span class="no">gitlab_rails[&#39;monitoring_whitelist&#39;] = [&#39;0.0.0.0/0&#39;]</span>
+          <span class="no">gitlab_rails[&#39;gitlab_username_changing_enabled&#39;] = false</span>
+          <span class="no">gitlab_rails[&#39;gitlab_default_can_create_group&#39;] = false</span>
+          <span class="no">gitlab_rails[&#39;gitlab_default_projects_features_issues&#39;] = false</span>
+          <span class="no">gitlab_rails[&#39;gitlab_default_projects_features_merge_requests&#39;] = false</span>
+          <span class="no">gitlab_rails[&#39;gitlab_default_projects_features_wiki&#39;] = false</span>
+          <span class="no">gitlab_rails[&#39;gitlab_default_projects_features_snippets&#39;] = false</span>
+          <span class="no">gitlab_rails[&#39;gitlab_default_projects_features_builds&#39;] = false</span>
+          <span class="no">gitlab_rails[&#39;gitlab_default_projects_features_container_registry&#39;] = false</span>
+          <span class="no">gitlab_rails[&#39;backup_keep_time&#39;] = 604800</span>
+    <span class="nt">ports</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;${GITLAB_SSH_PORT}:22&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;${GITLAB_HTTP_PORT}:80&quot;</span>
+    <span class="nt">networks</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">artemis-net</span>
+
+  <span class="nt">jenkins</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jenkins/jenkins:lts</span>
+    <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+    <span class="nt">user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root</span>
+    <span class="nt">volumes</span><span class="p">:</span>
+      <span class="c1"># - $BACKUP_DIR/jenkins:/var/jenkins_backup # Optional but useful</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./data/jenkins/home:/var/jenkins_home</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock:/var/run/docker.sock</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/docker:/usr/bin/docker:ro</span>
+    <span class="nt">ports</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;${JENKINS_HTTP_PORT}:8080&quot;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;50000:50000&quot;</span>
+    <span class="nt">networks</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">artemis-net</span>
+
+  <span class="nt">artemis</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ghcr.io/ls1intum/artemis:${ARTEMIS_VERSION:-latest}</span>
+    <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+    <span class="nt">depends_on</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">artemis-db</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">gitlab</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jenkins</span>
+    <span class="nt">volumes</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./data/artemis/config:/opt/artemis/config</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./data/artemis/data:/opt/artemis/data</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./branding:/opt/artemis/public/content:ro</span>
+    <span class="nt">environment</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">spring.profiles.active=prod,jenkins,gitlab,artemis,scheduling</span>
+    <span class="nt">ports</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;${ARTEMIS_HTTP_PORT:-8080}:8080&quot;</span>
+    <span class="nt">networks</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">artemis-net</span>
+
+  <span class="nt">artemis-db</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mysql:8.0.23</span>
+    <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+    <span class="nt">volumes</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./data/artemis-db:/var/lib/mysql</span>
+    <span class="nt">environment</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">MYSQL_ALLOW_EMPTY_PASSWORD=yes</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">MYSQL_DATABASE=Artemis</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --collation-server=utf8mb4_unicode_ci --explicit_defaults_for_timestamp</span>
+    <span class="nt">networks</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">artemis-net</span>
+    <span class="nt">cap_add</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SYS_NICE</span>
+
+<span class="nt">networks</span><span class="p">:</span>
+  <span class="nt">artemis-net</span><span class="p">:</span>
+    <span class="nt">ipam</span><span class="p">:</span>
+      <span class="nt">driver</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+      <span class="nt">config</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="nt">subnet</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.1.0.0/16</span> <span class="c1"># Arbitrary, but set this to the IPs your department defines for local docker networks</span>
+</pre></div>
+</div>
+<p>You can find the latest Dockerfile with additional information <a class="reference external" href="https://github.com/ls1intum/Artemis/blob/develop/src/main/docker/Dockerfile">here</a>.</p>
+<ul>
+<li><p>The Dockerfile defines three Docker volumes</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/opt/artemis/config</span></code>: This will be used to store the configuration of Artemis in YAML files. If this directory is empty, the default configuration of Artemis will be copied upon container start.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/opt/artemis/data</span></code>: This directory should be used for any data (e.g., local clone of repositories). Therefore, configure Artemis to store this files into this directory. In order to do that, you have to change some properties in configuration files (i.e., <code class="docutils literal notranslate"><span class="pre">artemis.repo-clone-path</span></code>, <code class="docutils literal notranslate"><span class="pre">artemis.repo-download-clone-path</span></code>, <code class="docutils literal notranslate"><span class="pre">artemis.course-archives-path</span></code>, <code class="docutils literal notranslate"><span class="pre">artemis.submission-export-path</span></code>, and <code class="docutils literal notranslate"><span class="pre">artemis.file-upload-path</span></code>). Otherwise you’ll get permission failures.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/opt/artemis/public/content</span></code>: This directory will be used for branding. You can specify a favicon, <code class="docutils literal notranslate"><span class="pre">imprint.html</span></code>, and <code class="docutils literal notranslate"><span class="pre">privacy_statement.html</span></code> here.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>The Dockerfile sets the correct permissions to the folders that are mounted to the volumes on startup (not recursive).</p></li>
+<li><p>The startup script is located <a class="reference external" href="https://github.com/ls1intum/Artemis/blob/develop/bootstrap.sh">here</a>.</p></li>
+<li><p>The Dockerfile assumes that the mounted volumes are located on a file system with the following locale settings (see <a class="reference external" href="https://github.com/ls1intum/Artemis/issues/4439">#4439</a> for more details):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>LC_ALL <code class="docutils literal notranslate"><span class="pre">en_US.UTF-8</span></code></p></li>
+<li><p>LANG <code class="docutils literal notranslate"><span class="pre">en_US.UTF-8</span></code></p></li>
+<li><p>LANGUAGE <code class="docutils literal notranslate"><span class="pre">en_US.UTF-8</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
 </div>
 <div class="section" id="run-the-server-via-a-run-configuration-in-intellij">
 <h3>Run the server via a run configuration in IntelliJ<a class="headerlink" href="#run-the-server-via-a-run-configuration-in-intellij" title="Permalink to this headline"></a></h3>
