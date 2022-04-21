@@ -201,20 +201,21 @@ Follow the additional steps for Jira and Bitbucket.</p>
 <li><p>Bitbucket: Do not connect Bitbucket with Jira yet</p></li>
 </ul>
 </li>
-<li><p>Make sure that <a class="reference external" href="https://www.howtoinstall.me/ubuntu/18-04/xdg-utils/">xdg-utils</a> is installed before running the following script.</p>
+<li><p>Make sure that Jira, Bitbucket and Bamboo have finished starting up.</p>
 <blockquote>
-<div><details>
+<div><p>(Only Linux &amp; Windows) Make sure that <a class="reference external" href="https://www.howtoinstall.me/ubuntu/18-04/xdg-utils/">xdg-utils</a> is installed before running the following script.</p>
+<details>
 <summary>xdg-utils for Windows users</summary>
 An easy way to use the xdg-utils on Windows would be to install them on the linux-subsystem, which should be activated anyways when running Docker on Windows.
 For the installation on the subsystem the above linked explanation can be used.
 <br>
 Make sure to execute the script from the subsystem.
 </details></div></blockquote>
-<p>Make sure that Jira, Bitbucket and Bamboo have finished starting up.</p>
 <p>Execute the shell script <code class="docutils literal notranslate"><span class="pre">atlassian-setup.sh</span></code> in the
 <code class="docutils literal notranslate"><span class="pre">src/main/docker</span></code> directory (e.g. with
 <code class="docutils literal notranslate"><span class="pre">src/main/docker/./atlassian-setup.sh</span></code>). This script creates
-groups, users and disabled application links between the 3 applications.</p>
+groups, users and assigns the user to their respective group.
+In addition, it configures disabled application links between the 3 applications.</p>
 </li>
 <li><p>Enable the created <a class="reference external" href="https://confluence.atlassian.com/doc/linking-to-another-application-360677690.html">application
 links</a>
@@ -259,9 +260,9 @@ Bitbucket → Bamboo URl to</strong> <code class="docutils literal notranslate">
 </li>
 </ul>
 </li>
-<li><p>The script <em>(step 3)</em> has already created users and groups but you need to
-manually assign the users into their respective group in Jira. In our
-test setup, users 1-5 are students, 6-10 are tutors, 11-15 are
+<li><p>The script <em>(step 3)</em> has already created the required users and assigned them to their respective group in Jira.
+Now, make sure that they are assigned correctly according to the following test setup:
+users 1-5 are students, 6-10 are tutors, 11-15 are
 editors and 16-20 are instructors. The usernames are artemis_test_user_{1-20}
 and the password is again the username. When you create a course in artemis
 you have to manually choose the created groups (students, tutors, editors,
