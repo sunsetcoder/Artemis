@@ -280,13 +280,14 @@ Depending on the feature set, some options might not be available during the cre
 The table below provides an overview of the supported features:</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 15%" />
-<col style="width: 15%" />
-<col style="width: 15%" />
 <col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 10%" />
-<col style="width: 21%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 18%" />
+<col style="width: 16%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Programming Language</p></th>
@@ -296,6 +297,7 @@ The table below provides an overview of the supported features:</p>
 <th class="head"><p>Package Name</p></th>
 <th class="head"><p>Project Type</p></th>
 <th class="head"><p>Solution Repository Checkout</p></th>
+<th class="head"><p>Testwise Coverage Analysis</p></th>
 </tr>
 </thead>
 <tbody>
@@ -306,11 +308,13 @@ The table below provides an overview of the supported features:</p>
 <td><p>yes</p></td>
 <td><p>yes</p></td>
 <td><p>no</p></td>
+<td><p>yes (only for Gradle)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Python</p></td>
 <td><p>yes</p></td>
 <td><p>no</p></td>
 <td><p>yes</p></td>
+<td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>no</p></td>
@@ -322,8 +326,10 @@ The table below provides an overview of the supported features:</p>
 <td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>no</p></td>
+<td><p>no</p></td>
 </tr>
 <tr class="row-odd"><td><p>C (FACT framework)</p></td>
+<td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>no</p></td>
@@ -338,6 +344,7 @@ The table below provides an overview of the supported features:</p>
 <td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>yes</p></td>
+<td><p>no</p></td>
 </tr>
 <tr class="row-odd"><td><p>Kotlin</p></td>
 <td><p>yes</p></td>
@@ -346,8 +353,10 @@ The table below provides an overview of the supported features:</p>
 <td><p>yes</p></td>
 <td><p>no</p></td>
 <td><p>no</p></td>
+<td><p>no</p></td>
 </tr>
 <tr class="row-even"><td><p>VHDL</p></td>
+<td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>no</p></td>
@@ -362,8 +371,10 @@ The table below provides an overview of the supported features:</p>
 <td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>no</p></td>
+<td><p>no</p></td>
 </tr>
 <tr class="row-even"><td><p>Swift</p></td>
+<td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>no</p></td>
@@ -378,6 +389,7 @@ The table below provides an overview of the supported features:</p>
 <td><p>no</p></td>
 <td><p>no</p></td>
 <td><p>yes</p></td>
+<td><p>no</p></td>
 </tr>
 </tbody>
 </table>
@@ -388,6 +400,8 @@ The table below provides an overview of the supported features:</p>
 <li><p><em>Plagiarism Checks</em>: <code class="docutils literal notranslate"><span class="pre">Artemis</span></code> is able to automatically calculate the similarity between student submissions. A side-by-side view of similar submissions is available to confirm the plagiarism suspicion.</p></li>
 <li><p><em>Package Name</em>: A package name has to be provided</p></li>
 <li><p><em>Solution Repository Checkout</em>: Instructors are able to compare a student submission against a sample solution in the solution repository</p></li>
+<li><p><em>Testwise Coverage Analysis</em>: <code class="docutils literal notranslate"><span class="pre">Artemis</span></code> can generate a build plan which additionally executes a testwise coverage analysis.
+<code class="docutils literal notranslate"><span class="pre">Artemis</span></code> aggregates the recorded data into different metrics. This feature allows instructors to check which code in the solution submission is how often executed by the test cases.</p></li>
 </ul>
 </li>
 </ul>
@@ -398,6 +412,10 @@ The table below provides an overview of the supported features:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Static Code Analysis for <code class="docutils literal notranslate"><span class="pre">C</span></code> exercises is only supported for <code class="docutils literal notranslate"><span class="pre">Bamboo</span></code> at the moment.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Testwise Coverage Analysis is only supported for <code class="docutils literal notranslate"><span class="pre">Bamboo</span></code> and exercises with regular test runs at the moment.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -620,7 +638,9 @@ Not supported together with static code analysis. Cannot be changed after the ex
 <li><p><strong>Check out repository of sample solution:</strong> Activate this option to checkout the solution into the ‘solution’ path.
 This option is useful to compare the student’s submission with the sample solution. This option is not available for all programming languages.</p></li>
 <li><p><strong>Allow Offline IDE:</strong> Allow students to clone their personal repository and work on the exercise with their preferred IDE.</p></li>
-<li><p><strong>Allow Online Editor:</strong> Allow students to work on the exercise using the Artemis Online Code Editor.</p>
+<li><p><strong>Allow Online Editor:</strong> Allow students to work on the exercise using the Artemis Online Code Editor.</p></li>
+<li><p><strong>Record Testwise Coverage:</strong> Activate this option to record the testwise coverage for the solution repository.
+This option is only available for Java-Gradle-projects with non-sequential test runs.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>At least one of the options <strong>Allow Offline IDE:</strong> and <strong>Allow Online Editor:</strong> must be active</p>
