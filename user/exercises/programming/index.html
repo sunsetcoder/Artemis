@@ -280,14 +280,14 @@ Depending on the feature set, some options might not be available during the cre
 The table below provides an overview of the supported features:</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 13%" />
-<col style="width: 13%" />
-<col style="width: 13%" />
-<col style="width: 11%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 10%" />
 <col style="width: 8%" />
 <col style="width: 8%" />
-<col style="width: 18%" />
 <col style="width: 16%" />
+<col style="width: 24%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Programming Language</p></th>
@@ -308,7 +308,7 @@ The table below provides an overview of the supported features:</p>
 <td><p>yes</p></td>
 <td><p>yes</p></td>
 <td><p>no</p></td>
-<td><p>yes (only for Gradle)</p></td>
+<td><p>yes (only for Gradle on Atlassian Setup)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Python</p></td>
 <td><p>yes</p></td>
@@ -517,8 +517,10 @@ the exercise creation.</p></li>
 <li><p><strong>Programming Language:</strong> The programming language for the exercise. Artemis chooses the template accordingly.
 Refer to the <a class="reference internal" href="#programming-features"><span class="std std-ref">programming exercise features</span></a> for an overview of the supported features for each template.</p></li>
 <li><p><strong>Project Type:</strong> Determines the project structure of the template. Not available for all programming languages.</p></li>
-<li><p><strong>Package Name:</strong> The package name used for this exercise. Not available for all programming languages.</p></li>
+<li><p><strong>With exemplary dependency:</strong> Adds an external Apache commons-lang dependency to the generated project as an example</p></li>
 </ul>
+<p>how maven dependencies should be used with Artemis exercises. Only available for Java exercises.
+- <strong>Package Name:</strong> The package name used for this exercise. Not available for all programming languages.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -827,9 +829,9 @@ ln -s <span class="s2">&quot;</span><span class="nv">$dir</span><span class="s2"
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 20%" />
-<col style="width: 23%" />
-<col style="width: 29%" />
+<col style="width: 25%" />
 <col style="width: 28%" />
+<col style="width: 27%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Programming Language</p></th>
@@ -840,7 +842,8 @@ ln -s <span class="s2">&quot;</span><span class="nv">$dir</span><span class="s2"
 </thead>
 <tbody>
 <tr class="row-even"><td rowspan="4"><p>Java</p></td>
-<td rowspan="4"><p>Maven plugins (pom.xml)</p></td>
+<td rowspan="4"><p>Maven plugins
+(pom.xml or build.gradle)</p></td>
 <td><p>Spotbugs</p></td>
 <td><p>spotbugs-exclusions.xml</p></td>
 </tr>
@@ -879,7 +882,7 @@ ln -s <span class="s2">&quot;</span><span class="nv">$dir</span><span class="s2"
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Instructors are able to completely disable the usage of a specific static code analysis tool by removing the plugin/dependency from the execution mechanism.
-In case of Maven plugins, instructors can remove the unwanted tools from the <em>pom.xml</em>.
+In case of Maven plugins, instructors can remove the unwanted tools from the <em>pom.xml</em> or <em>build.gradle</em>.
 Alternatively, instructors can alter the task/script that executes the tools in the build plan.
 PMD and PMD CPD are a special case as both tools share a common plugin. To disable one or the other, instructors must delete the execution of a tool from the build plan.</p>
 </div>
