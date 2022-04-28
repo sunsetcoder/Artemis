@@ -324,7 +324,7 @@ It gets activated when a particular jar file is detected on the classpath. The s
 <h2>14. File handling<a class="headerlink" href="#file-handling" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>Never use operating system (OS) specific file paths such as “test/test”. Always use OS independent paths.</p></li>
-<li><p>Do not deal with File.separator manually. Instead use the Paths.get(firstPart, secondPart, …) method which deals with separators automatically.</p></li>
+<li><p>Do not deal with File.separator manually. Instead use the Path.of(firstPart, secondPart, …) method which deals with separators automatically.</p></li>
 <li><p>Existing paths can easily be appended with a new folder using <code class="docutils literal notranslate"><span class="pre">existingPath.resolve(subfolder)</span></code></p></li>
 </ul>
 </div>
