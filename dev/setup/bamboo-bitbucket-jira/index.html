@@ -185,6 +185,7 @@ under <code class="docutils literal notranslate"><span class="pre">localhost:799
 </ul>
 </li>
 <li><p>Provide the just created license key during the setup and create an admin user with the same credentials in all 3 applications.
+For the Bamboo database you can choose H2.
 Also, you can select the evaluation/internal/test/dev setups if you are asked.
 Follow the additional steps for Jira and Bitbucket.</p>
 <ul class="simple">
@@ -324,6 +325,7 @@ groups should now be available.</p></li>
 </table>
 </div></blockquote>
 </li>
+<li><p>Give the test users User access on Bitbucket: Configure → Global permissions</p></li>
 <li><p>In Bamboo create a global variable named
 SERVER_PLUGIN_SECRET_PASSWORD, the value of this variable will be used
 as the secret. The value of this variable should be then stored in
@@ -343,6 +345,7 @@ Capability type <code class="docutils literal notranslate"><span class="pre">Exe
 as JDK label → insert <code class="docutils literal notranslate"><span class="pre">/usr/lib/jvm/java-17-oracle</span></code> as Java home.</p></li>
 </ul>
 </li>
+<li><p>Create a Bamboo agent. Configure → Agents → Add local agent</p></li>
 <li><p>Generate a personal access token</p>
 <p>While username and password can still be used as a fallback, this option is already marked as deprecated and will
 be removed in the future.</p>
