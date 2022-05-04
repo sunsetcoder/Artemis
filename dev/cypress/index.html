@@ -50,7 +50,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../system-design/">System Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../migration/">Database Migration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../use-local-user-management/">Using local user management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../saml2-shibboleth/">Shibboleth/SAML2 Login &amp; Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../guided-tour/">Guided Tour</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../testservers/">Test Servers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../docker/">Builds and Dependency Management</a></li>
@@ -64,6 +63,7 @@
 <p class="caption" role="heading"><span class="caption-text">Administration Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../admin/registration/">User Registration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/saml2-shibboleth/">Shibboleth/SAML2 Login &amp; Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../admin/accessRights/">Access Rights</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../admin/troubleshooting/">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../admin/knownIssues/">Known Issues</a></li>
@@ -105,6 +105,9 @@ The main reason for the complexity is that it is very hard to automatically setu
 <h2>Artemis Deployment on Bamboo Build Agent<a class="headerlink" href="#artemis-deployment-on-bamboo-build-agent" title="Permalink to this headline"></a></h2>
 <p>Every execution of the Cypress test suite requires its own deployment of Artemis. The easiest way to accomplish this is to deploy Artemis locally on the build agent, which executes the Cypress tests.
 Using docker-compose we can start a MySQL database and the Artemis server locally on the build agent and connect it to the prelive system in the university data center.</p>
+<div class="figure align-center" id="id1">
+<img alt="Artemis Deployment on Bamboo Build Agent for Cypress" src="../../_images/cypress_bamboo_deployment_diagram.svg" /><p class="caption"><span class="caption-text">Artemis Deployment on Bamboo Build Agent for Cypress</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</div>
 <p>In total there are three Docker containers started in the Bamboo build agent:</p>
 <ol class="arabic">
 <li><p>MySQL</p>
@@ -141,8 +144,8 @@ This does imply a delay (about 10 minutes on average) between the push of new co
 <h2>Artemis Deployment in Test Environment<a class="headerlink" href="#artemis-deployment-in-test-environment" title="Permalink to this headline"></a></h2>
 <p>There is another build plan on Bamboo which executes the Cypress test suite. <a class="reference external" href="https://bamboo.ase.in.tum.de/chain/viewChain.action?planKey=ARTEMIS-AETBB">This build plan</a> deploys the latest Artemis executable of the develop branch on an already configured test environment (test server 3) and executes the Cypress test suite against it.
 This build plan is automatically executed every 8 hours and verifies that test server 3 is working properly.</p>
-<div class="figure align-center" id="id1">
-<img alt="Artemis Deployment on test environment for Cypress" src="../../_images/cypress_test_environment_deployment_diagram.svg" /><p class="caption"><span class="caption-text">Artemis Deployment on test environment for Cypress</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+<div class="figure align-center" id="id2">
+<img alt="Artemis Deployment on test environment for Cypress" src="../../_images/cypress_test_environment_deployment_diagram.svg" /><p class="caption"><span class="caption-text">Artemis Deployment on test environment for Cypress</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
 </div>
 <p>The difference of this setup is that the Artemis server is deployed on a separate environment which already contains the necessary configuration files for the Artemis server to connect to the prelive system.
 The Docker image for the Cypress container should be exactly the same as the Cypress image used in the docker-compose file for the deployment on a Bamboo build agent.</p>

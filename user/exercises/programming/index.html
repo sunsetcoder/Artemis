@@ -92,7 +92,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../dev/system-design/">System Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev/migration/">Database Migration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev/use-local-user-management/">Using local user management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev/saml2-shibboleth/">Shibboleth/SAML2 Login &amp; Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev/guided-tour/">Guided Tour</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev/testservers/">Test Servers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev/docker/">Builds and Dependency Management</a></li>
@@ -101,6 +100,7 @@
 <p class="caption" role="heading"><span class="caption-text">Administration Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../admin/registration/">User Registration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../admin/saml2-shibboleth/">Shibboleth/SAML2 Login &amp; Registration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../admin/accessRights/">Access Rights</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../admin/troubleshooting/">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../admin/knownIssues/">Known Issues</a></li>
@@ -517,10 +517,10 @@ the exercise creation.</p></li>
 <li><p><strong>Programming Language:</strong> The programming language for the exercise. Artemis chooses the template accordingly.
 Refer to the <a class="reference internal" href="#programming-features"><span class="std std-ref">programming exercise features</span></a> for an overview of the supported features for each template.</p></li>
 <li><p><strong>Project Type:</strong> Determines the project structure of the template. Not available for all programming languages.</p></li>
-<li><p><strong>With exemplary dependency:</strong> Adds an external Apache commons-lang dependency to the generated project as an example</p></li>
+<li><p><strong>With exemplary dependency:</strong> Adds an external Apache commons-lang dependency to the generated project as an example
+how maven dependencies should be used with Artemis exercises. Only available for Java exercises.</p></li>
+<li><p><strong>Package Name:</strong> The package name used for this exercise. Not available for all programming languages.</p></li>
 </ul>
-<p>how maven dependencies should be used with Artemis exercises. Only available for Java exercises.
-- <strong>Package Name:</strong> The package name used for this exercise. Not available for all programming languages.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
