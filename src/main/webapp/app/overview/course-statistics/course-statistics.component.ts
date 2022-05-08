@@ -535,7 +535,7 @@ export class CourseStatisticsComponent implements OnInit, OnDestroy, AfterViewIn
 
     /**
      * Calculates an arbitrary score type for an arbitrary exercise type
-     * @param exerciseType the exercise type for which the score should be calculates. Must be an element of {Programming, Modeling, Quiz, Text, File upload}
+     * @param exerciseType the exercise type for which the score should be calculated. Must be an element of {Programming, Modeling, Quiz, Text, File upload}
      * @param scoreType the score type that should be calculated. Element of {Absolute score, Max points,Current relative score,Presentation score,Reachable points,Relative score}
      * @returns requested score value
      * @private
@@ -572,9 +572,9 @@ export class CourseStatisticsComponent implements OnInit, OnDestroy, AfterViewIn
 
     /**
      * Depending on the type of the exercise, it adds a new object containing
-     * the different scores of the correspnding exercise group of the chart
+     * the different scores of the corresponding exercise group of the chart
      * @param exercise an arbitrary exercise of a course
-     * @param series an array of dedicated objects containing the students performance in this exercise that is visualized by the chart
+     * @param series an array of dedicated objects containing the students' performance in this exercise that is visualized by the chart
      * @private
      */
     private pushToData(exercise: Exercise, series: any[]): void {
@@ -621,7 +621,7 @@ export class CourseStatisticsComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * Adds some meta data to every non-empty exercise group and pushes it to ngxExerciseGroups
+     * Adds some metadata to every non-empty exercise group and pushes it to ngxExerciseGroups
      * @param exerciseGroups array containing the exercise groups
      * @param types array containing all possible exercise types (programming, modeling, quiz, text, file upload)
      * @private

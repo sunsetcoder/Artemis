@@ -484,7 +484,7 @@ export class CodeEditorAceComponent implements AfterViewInit, OnChanges, OnDestr
     }
 
     /**
-     * Called whenever a inline feedback element is emitted. Updates existing feedbacks or adds onto it
+     * Called whenever an inline feedback element is emitted. Updates existing feedbacks or adds onto it
      * @param feedback Newly created inline feedback.
      */
     updateFeedback(feedback: Feedback) {
@@ -503,7 +503,7 @@ export class CodeEditorAceComponent implements AfterViewInit, OnChanges, OnDestr
     }
 
     /**
-     * Called whenever a inline feedback is cancelled. Removes it from ace editor or just aligns height.
+     * Called whenever an inline feedback is cancelled. Removes it from ace editor or just aligns height.
      * @param line
      */
     cancelFeedback(line: number) {
